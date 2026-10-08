@@ -101,30 +101,38 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 .scaler{transform-origin:top right}
 
 /* The letter (A4 @96dpi). Fixed paper colors: it is a printed document in both themes. */
-.paper{width:794px;min-height:1123px;background:var(--paper);color:var(--paper-ink);font-family:var(--f-body);font-size:14.5px;line-height:1.65;padding:48px 60px 56px;direction:rtl;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.paper{width:794px;min-height:1123px;background:var(--paper);color:var(--paper-ink);font-family:var(--pf-body);font-size:14.5px;line-height:1.65;padding:48px 60px 56px;direction:rtl;box-shadow:0 6px 24px rgba(0,0,0,.25)}
 .paper.exporting{box-shadow:none;min-height:0;padding-block:0}
 .lh{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding-bottom:16px;border-bottom:2px solid var(--paper-accent)}
 .lh.logo-right{flex-direction:row-reverse;text-align:left}
 .lh.logo-center{flex-direction:column-reverse;align-items:center;text-align:center}
-.paper.f-classic{font-family:var(--f-display);font-size:15px}
+.paper{--pf-head:var(--f-display);--pf-body:var(--f-body)}
+.fontpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;max-height:300px;overflow:auto;padding:2px}
+.fontpick button{border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:8px 10px;text-align:right;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-width:0}
+.fontpick button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.fontpick .smp{font-size:20px;line-height:1.25;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fontpick .nm{font-size:11.5px;color:var(--muted);font-family:var(--f-body)}
+.fontrole{display:flex;gap:4px;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:3px;width:max-content;max-width:100%}
+.fontrole button{border:0;background:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;color:var(--muted)}
+.fontrole button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
 .swatches{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .sw{width:30px;height:30px;border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
 .sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
 .swatches input[type=color]{width:44px;height:32px;border:1px solid var(--line);border-radius:7px;background:var(--surface-2);padding:2px;cursor:pointer}
-.lh .co{font-family:var(--f-display);font-size:24px;font-weight:700;color:var(--paper-accent);line-height:1.2}
+.lh .co{font-family:var(--pf-head);font-size:24px;font-weight:700;color:var(--paper-accent);line-height:1.2}
 .lh .tag{color:var(--paper-muted);font-size:13px}
 .lh .contact{font-size:12.5px;color:var(--paper-muted);line-height:1.6;margin-top:6px}
 .lh img{max-height:78px;max-width:170px;object-fit:contain}
 .meta{display:flex;justify-content:space-between;margin-top:22px;font-size:13.5px;color:var(--paper-muted);font-variant-numeric:tabular-nums}
 .to{margin-top:18px}
 .to b{display:block}
-.subject{margin:22px 0 14px;font-weight:700;font-size:15.5px}
+.subject{margin:22px 0 14px;font-weight:700;font-size:15.5px;font-family:var(--pf-head)}
 .subject u{text-underline-offset:4px}
 .paper p{margin:0 0 10px}
 .facts{width:100%;border-collapse:collapse;margin:14px 0 6px;font-size:13.5px}
 .facts td{padding:6px 10px;border:1px solid var(--paper-line);vertical-align:top}
 .facts td:first-child{width:150px;background:#f3f6f7;font-weight:700;color:#33424a}
-.paper h3{font-family:var(--f-display);font-size:17px;color:var(--paper-accent);margin:22px 0 8px}
+.paper h3{font-family:var(--pf-head);font-size:17px;color:var(--paper-accent);margin:22px 0 8px}
 .ftable{width:100%;border-collapse:collapse;font-size:13px}
 .ftable th{background:var(--paper-accent);color:#fff;text-align:right;padding:7px 8px;font-weight:600}
 .ftable td{border-bottom:1px solid var(--paper-line);padding:7px 8px;vertical-align:top}
@@ -290,18 +298,13 @@ body.locked nav.tabs,body.locked #view-edit,body.locked #view-list,body.locked #
         </div>
       </fieldset>
       <fieldset>
-        <legend id="signer-legend">החותם על הדוח</legend>
-        <div class="grid2">
-          <label class="f">שם הבודק<input type="text" id="s-insp" data-s="inspector"></label>
-          <label class="f">תפקיד / הסמכה<input type="text" id="s-title" data-s="title" placeholder="למשל: מהנדס אינסטלציה, מ.ר. 12345"></label>
-        </div>
-        <div class="f" style="font-size:13px;color:var(--muted);font-weight:600">חתימה <span class="hint">צייר בעכבר או באצבע</span></div>
+        <legend>חתימה</legend>
         <canvas class="sigpad" id="sigpad" width="840" height="280"></canvas>
         <div style="display:flex;flex-wrap:wrap;gap:8px">
-          <label class="btn">העלה קובץ חתימה<input type="file" id="sig-file" accept="image/*" hidden></label>
+          <label class="btn">העלה קובץ חתימה או חותמת<input type="file" id="sig-file" accept="image/*" hidden></label>
           <button type="button" class="btn ghost" id="sig-clear">נקה חתימה</button>
         </div>
-        <span class="hint">אפשר להעלות צילום או סריקה של חתימה (PNG עם רקע שקוף נראה הכי טוב), או לצייר אותה בתיבה.</span>
+        <span class="hint">צייר בעכבר או באצבע, או העלה צילום של חתימה או חותמת (PNG עם רקע שקוף נראה הכי טוב). החתימה מופיעה בסוף כל דוח, מעל שם החברה.</span>
       </fieldset>
       <fieldset>
         <legend>עיצוב הדוח</legend>
@@ -316,15 +319,27 @@ body.locked nav.tabs,body.locked #view-edit,body.locked #view-list,body.locked #
           <label class="hint" style="display:flex;align-items:center;gap:6px">צבע אחר<input type="color" id="s-accent" data-s="accent"></label>
         </div>
         <div class="grid2">
-          <label class="f">גופן הדוח
-            <select id="s-font" data-s="font"><option value="modern">מודרני (ללא תגים)</option><option value="classic">קלאסי (עם תגים)</option></select>
-          </label>
           <label class="f">מיקום הלוגו
             <select id="s-logopos" data-s="logoPos"><option value="left">משמאל</option><option value="right">מימין</option><option value="center">במרכז, מעל שם החברה</option></select>
           </label>
         </div>
+        <div class="f" style="font-size:13px;color:var(--muted);font-weight:600">גופנים</div>
+        <div class="fontrole" role="tablist" id="fontrole">
+          <button type="button" role="tab" aria-selected="true" data-role="headFont">כותרות <span class="hint" id="fr-head"></span></button>
+          <button type="button" role="tab" aria-selected="false" data-role="bodyFont">טקסט <span class="hint" id="fr-body"></span></button>
+        </div>
+        <div class="fontpick" id="fontpick"></div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+          <label class="btn">העלה גופן משלך<input type="file" id="font-file" accept=".ttf,.otf,.woff,.woff2,font/*" hidden></label>
+          <button type="button" class="btn ghost" id="font-clear" hidden>הסר את הגופן שלי</button>
+          <span class="hint">לגופן שרכשת (למשל ממאסטרפונט או פונטימס): קובץ TTF, OTF, WOFF או WOFF2.</span>
+        </div>
+        <input type="hidden" id="s-headfont" data-s="headFont"><input type="hidden" id="s-bodyfont" data-s="bodyFont">
+        <label class="f">גודל הלוגו <span class="hint" id="logo-size-val"></span>
+          <input type="range" id="s-logosize" data-s="logoSize" min="40" max="220" step="2" style="width:100%;max-width:420px;accent-color:var(--accent)">
+        </label>
       </fieldset>
-      <div><button type="submit" class="btn primary" id="btn-save-settings">שמור פרטי חברה</button></div>
+      <div><button type="submit" class="btn primary" id="btn-save-settings">שמור הגדרות</button></div>
     </form>
     <form class="panel settings" id="pwform" style="margin-top:16px" hidden autocomplete="off">
       <fieldset>
@@ -352,7 +367,7 @@ const fmtDate=iso=>{if(!iso)return"";const[y,m,d]=iso.split("-");return `${+d}.$
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const joinHe=a=>a.length<2?(a[0]||""):a.slice(0,-1).join(", ")+" ו"+a[a.length-1];
 
-const SAMPLE_SETTINGS={company:"שם החברה שלך",tagline:"בדיקה ותחזוקת מערכות מים, ניקוז וביוב",phone:"050-0000000",email:"office@example.co.il",addr:"",reg:"",inspector:"שם הבודק",title:"",logo:"",signature:"",accent:"#0d6574",font:"modern",logoPos:"left"};
+const SAMPLE_SETTINGS={company:"שם החברה שלך",tagline:"בדיקה ותחזוקת מערכות מים, ניקוז וביוב",phone:"050-0000000",email:"office@example.co.il",addr:"",reg:"",logo:"",signature:"",accent:"#0d6574",headFont:"Frank Ruhl Libre",bodyFont:"Assistant",customFont:null,logoPos:"left",logoSize:"78"};
 const SAMPLE={id:null,example:true,number:"",date:today(),address:"רח׳ הנרקיס 14, רמת גן",site:"בניין מגורים, 9 קומות",client:"נציגות הבית המשותף",contact:"מר יוסי לוי",
   systems:["חדר משאבות","מערכת הגברת לחץ"],kind:"בדיקה תקופתית",intro:"",
   findings:[
@@ -374,7 +389,7 @@ const lsGet=()=>{try{return JSON.parse(localStorage.getItem(LS))||{reports:[],se
 const lsPut=v=>{try{localStorage.setItem(LS,JSON.stringify(v))}catch(e){}};
 let db=null, mode="local", sb=null, fs=null, me=null;
 const CFG=window.APP_CONFIG||{};
-const SIGNER_KEYS=["inspector","title","signature"];
+const SIGNER_KEYS=[];
 const pick=(o,keys,keep)=>Object.fromEntries(Object.entries(o).filter(([k])=>keys.includes(k)===keep));
 function cloudErr(e){console.error(e);return e}
 const clean=o=>JSON.parse(JSON.stringify(o));
@@ -386,10 +401,10 @@ const store={
     if(db){await db.collection("reports").doc(id).delete()} else {const v=lsGet();v.reports=v.reports.filter(x=>x.id!==id);lsPut(v);reports=v.reports;renderList()} },
   async saveSettings(s){ if(sb){
       await fs.doc("settings/company").set({data:clean(pick(s,SIGNER_KEYS,false)),updatedAt:stamp()});
-      await fs.doc("profiles/"+me.uid).set({data:clean(pick(s,SIGNER_KEYS,true)),updatedAt:stamp()});return}
+      return}
     if(db){await db.doc("settings/company").set(s)} else {const v=lsGet();v.settings=s;lsPut(v)} }
 };
-function initLocal(){const v=lsGet();reports=v.reports||[];if(v.settings){settings={...SAMPLE_SETTINGS,...v.settings};settingsSaved=true}renderAll();if(!cur.number)suggestNumber()}
+function initLocal(){const v=lsGet();reports=v.reports||[];if(v.settings){settings={...SAMPLE_SETTINGS,...v.settings};migrateSettings();settingsSaved=true}renderAll();if(!cur.number)suggestNumber()}
 async function initDb(){
   if(!window.claude||!window.claude.use)return;
   try{db=await window.claude.use("db")}catch(e){db=null}
@@ -397,7 +412,7 @@ async function initDb(){
   mode="db";
   db.collection("reports").onSnapshot(snap=>{reports=snap.docs.map(d=>d.data());renderList();updateCount();if(!cur.number)suggestNumber()},
     e=>showBanner("לא ניתן לטעון את הדוחות השמורים כרגע. רענן את הדף ונסה שוב."));
-  db.doc("settings/company").onSnapshot(snap=>{if(snap.exists){settings={...SAMPLE_SETTINGS,...snap.data()};settingsSaved=true;fillSettings();renderLetter()}},()=>{});
+  db.doc("settings/company").onSnapshot(snap=>{if(snap.exists){settings={...SAMPLE_SETTINGS,...snap.data()};migrateSettings();settingsSaved=true;fillSettings();renderLetter()}},()=>{});
 }
 
 /* ---------- cloud (Firebase) ---------- */
@@ -408,8 +423,6 @@ async function initCloud(){
   mode="cloud";
   try{firebase.apps.length||firebase.initializeApp(fc)}catch(e){showBanner("פרטי החיבור בקובץ config.js שגויים.");return true}
   sb=firebase.auth();fs=firebase.firestore();
-  $("#signer-legend").textContent="הפרטים שלי (מופיעים בדוחות שאני חותם עליהם)";
-  $("#btn-save-settings").textContent="שמור הגדרות";
   document.body.classList.add("locked");
   sb.onAuthStateChanged(u=>{if(u){if(!me||me.uid!==u.uid){me=u;onSignedIn()}}else{me=null;showLogin()}});
   return true;
@@ -430,9 +443,9 @@ function onSignedIn(){
   $("#userbox").hidden=false;$("#user-email").textContent=me.email||"";$("#pwform").hidden=false;
   unsubs.forEach(f=>f());let first=true,gotComp=false,gotProf=false,comp=null,prof=null;
   const applySettings=()=>{if(!(gotComp&&gotProf))return;
-    settings={...SAMPLE_SETTINGS,...(comp||{}),...(prof||{})};if(!prof)settings.inspector="";settingsSaved=!!(comp||prof);
+    settings={...SAMPLE_SETTINGS,...(prof&&prof.signature?{signature:prof.signature}:{}),...(comp||{})};migrateSettings();settingsSaved=!!comp;
     fillSettings();renderLetter();
-    if(first){first=false;fillForm();if(!cur.number||cur.example)suggestNumber();if(!prof)toast("ברוך הבא! מלא את הפרטים והחתימה שלך בלשונית פרטי החברה")}};
+    if(first){first=false;fillForm();if(!cur.number||cur.example)suggestNumber();if(!comp)toast("ברוך הבא! מלא את פרטי החברה, הלוגו והחתימה בלשונית פרטי החברה")}};
   const fail=e=>{console.error(e);showBanner(e&&e.code==="permission-denied"?"אין הרשאה לקרוא נתונים. בדוק את כללי האבטחה ב-Firestore לפי ההוראות.":"לא ניתן לטעון נתונים מהשרת. בדוק את החיבור לאינטרנט ורענן את הדף.")};
   unsubs=[
     fs.collection("reports").onSnapshot(q=>{reports=q.docs.map(d=>d.data().data).filter(Boolean);$("#banner").hidden=true;renderList();updateStatus();if(cur.number&&!cur.id&&!dirty)suggestNumber()},fail),
@@ -481,12 +494,11 @@ function letterHTML(r,s){
   const subj=`דוח ${r.kind||"בדיקה"}: ${r.systems.length?joinHe(r.systems):"מערכות מים"}${r.address?", "+r.address:""}`;
   const contact=[s.phone,s.email,s.addr].filter(Boolean).map(esc).join(" &nbsp;|&nbsp; ");
   const tally=Object.keys(STATUSES).map(k=>[k,r.findings.filter(f=>f.status===k).length]).filter(x=>x[1]);
-  const sg=r.signer&&r.signer.inspector?r.signer:s;
   const rows=r.findings.map((f,i)=>`<tr><td class="n">${i+1}</td><td><b>${esc(f.loc)}</b></td><td>${esc(f.text)}</td><td><span class="st st-${f.status}">${STATUSES[f.status]}</span></td><td>${esc(f.rec)}</td></tr>`).join("");
   return `
   <div class="lh logo-${esc(s.logoPos||"left")}"><div><div class="co">${esc(s.company||"שם החברה")}</div>${s.tagline?`<div class="tag">${esc(s.tagline)}</div>`:""}
     ${contact?`<div class="contact">${contact}${s.reg?`<br>ח.פ. ${esc(s.reg)}`:""}</div>`:""}</div>
-    ${s.logo?`<img src="${s.logo}" alt="">`:""}</div>
+    ${s.logo?`<img src="${s.logo}" alt="" style="max-height:${+s.logoSize||78}px;max-width:${Math.min(400,Math.round((+s.logoSize||78)*2.6))}px">`:""}</div>
   <div class="meta"><span>תאריך: ${fmtDate(r.date)}</span><span>דוח מס׳ ${esc(r.number)}</span></div>
   <div class="to">לכבוד<b>${esc(r.client||"___")}</b>${r.contact?`<div>לידי: ${esc(r.contact)}</div>`:""}</div>
   <div class="subject">הנדון: <u>${esc(subj)}</u></div>
@@ -496,18 +508,48 @@ function letterHTML(r,s){
     <tr><td>תאריך ביצוע</td><td>${fmtDate(r.date)}</td></tr>
     <tr><td>אופי הבדיקה</td><td>${esc(r.kind)}</td></tr>
     <tr><td>מערכות שנבדקו</td><td>${esc(r.systems.join(" · ")||"—")}</td></tr>
-    <tr><td>בוצע ע״י</td><td>${esc(sg.inspector)}${sg.title?`, ${esc(sg.title)}`:""}</td></tr>
   </table>
   <h3>ממצאי הבדיקה</h3>
   ${r.findings.length?`<table class="ftable"><thead><tr><th>#</th><th>רכיב / מיקום</th><th>ממצא</th><th>סטטוס</th><th>המלצה</th></tr></thead><tbody>${rows}</tbody></table>
    <div class="tally">${tally.map(([k,n])=>`<span>${STATUSES[k]}: ${n}</span>`).join("")}</div>`:`<p class="empty-note">לא נרשמו ממצאים.</p>`}
   <h3>סיכום והמלצות</h3>
   <div class="summary">${r.summary?esc(r.summary):`<span class="empty-note">—</span>`}</div>
-  <div class="sig"><div>בברכה,</div>${sg.signature?`<img src="${sg.signature}" alt="">`:`<div class="line"></div>`}
-    <div class="nm">${esc(sg.inspector)}</div>${sg.title?`<div>${esc(sg.title)}</div>`:""}<div>${esc(s.company)}</div></div>`;
+  <div class="sig"><div>בברכה,</div>${s.signature?`<img src="${s.signature}" alt="">`:`<div class="line"></div>`}
+    <div class="nm">${esc(s.company)}</div></div>`;
 }
 function autoIntroFor(r){const save=cur;cur=r;const t=autoIntro();cur=save;return t}
-function stylePaper(el){el.classList.toggle("f-classic",settings.font==="classic");el.style.setProperty("--paper-accent",settings.accent||"#0d6574")}
+const FONTS=[
+  ["Assistant","400;700","sans","נקי ומקצועי"],["Heebo","400;700","sans","מודרני ומוכר"],["Rubik","400;700","sans","מעוגל וברור"],
+  ["IBM Plex Sans Hebrew","400;700","sans","טכני ומדויק"],["Noto Sans Hebrew","400;700","sans","ניטרלי"],["Alef","400;700","sans","קלאסי ונקי"],
+  ["Varela Round","400","sans","רך ונעים"],["Fredoka","400;700","sans","ידידותי"],
+  ["Frank Ruhl Libre","400;700","serif","רשמי ומכובד"],["David Libre","400;700","serif","מסורתי"],["Noto Serif Hebrew","400;700","serif","ספרותי"],
+  ["Miriam Libre","400;700","sans","גיאומטרי"],["Bellefair","400","serif","אלגנטי"],["Secular One","400","sans","כותרת חזקה"],["Suez One","400","serif","כותרת בולטת"]];
+const SAMPLE_TXT="דוח בדיקה 123";
+const fontInfo=n=>FONTS.find(f=>f[0]===n);
+function fontStack(n){if(n==="__custom")return `"UserFont","Assistant",Arial,sans-serif`;const f=fontInfo(n)||FONTS[0];return `"${f[0]}",${f[2]==="serif"?'"David","Times New Roman",serif':'"Assistant",Arial,sans-serif'}`}
+function addFontLink(id,href){if(document.getElementById(id))return;const l=document.createElement("link");l.id=id;l.rel="stylesheet";l.href=href;document.head.appendChild(l)}
+function loadFont(n){const f=fontInfo(n);if(!f)return;addFontLink("gf-"+f[0].replace(/\W/g,""),`https://fonts.googleapis.com/css2?family=${encodeURIComponent(f[0]).replace(/%20/g,"+")}:wght@${f[1]}&display=swap`)}
+function loadPreviews(){addFontLink("gf-previews","https://fonts.googleapis.com/css2?"+FONTS.map(f=>"family="+encodeURIComponent(f[0]).replace(/%20/g,"+")).join("&")+"&text="+encodeURIComponent(SAMPLE_TXT)+"&display=swap")}
+let customLoaded=null;
+async function applyCustomFont(){
+  const cf=settings.customFont;if(!cf||!cf.data){customLoaded=null;return}
+  if(customLoaded===cf.data)return;
+  try{const ff=new FontFace("UserFont",`url(${cf.data})`);await ff.load();document.fonts.add(ff);customLoaded=cf.data;renderLetter();renderFontPick()}catch(e){console.error(e);toast("לא ניתן לטעון את הגופן שהועלה")}
+}
+function migrateSettings(){if(settings.font==="classic"&&settings.bodyFont==="Assistant")settings.bodyFont="Frank Ruhl Libre";delete settings.font;delete settings.inspector;delete settings.title}
+function stylePaper(el){
+  loadFont(settings.headFont);loadFont(settings.bodyFont);applyCustomFont();
+  el.style.setProperty("--pf-head",fontStack(settings.headFont));el.style.setProperty("--pf-body",fontStack(settings.bodyFont));
+  el.style.setProperty("--paper-accent",settings.accent||"#0d6574")}
+let fontRole="headFont";
+function renderFontPick(){
+  const list=[...FONTS.map(f=>[f[0],f[0],f[3]]),...(settings.customFont&&settings.customFont.data?[["__custom",settings.customFont.name,"הגופן שלך"]]:[])];
+  $("#fontpick").innerHTML=list.map(([id,label,desc])=>`<button type="button" data-font="${esc(id)}" aria-pressed="${settings[fontRole]===id}"><span class="smp" style="font-family:${esc(fontStack(id))}">${SAMPLE_TXT}</span><span class="nm">${esc(label)} · ${esc(desc)}</span></button>`).join("");
+  const nm=id=>id==="__custom"?(settings.customFont&&settings.customFont.name||"הגופן שלי"):id;
+  $("#fr-head").textContent=nm(settings.headFont);$("#fr-body").textContent=nm(settings.bodyFont);
+  document.querySelectorAll("#fontrole button").forEach(b=>b.setAttribute("aria-selected",b.dataset.role===fontRole));
+  $("#font-clear").hidden=!(settings.customFont&&settings.customFont.data);
+}
 function markSwatch(){document.querySelectorAll(".sw").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.c===(settings.accent||"").toLowerCase())))}
 function renderLetter(){const p=$("#paper");stylePaper(p);p.innerHTML=letterHTML(cur,settings);fitPreview()}
 function fitPreview(){
@@ -524,6 +566,7 @@ async function makePdf(r){
   const btn=$("#btn-pdf");btn.disabled=true;const old=btn.innerHTML;btn.textContent="מכין PDF…";
   try{
     await document.fonts.ready;
+    await Promise.all([settings.headFont,settings.bodyFont].filter(n=>n!=="__custom").flatMap(n=>["400","700"].map(w=>document.fonts.load(`${w} 16px "${n}"`,"אב").catch(()=>{}))));
     const el=document.createElement("div");el.className="paper exporting";stylePaper(el);el.innerHTML=letterHTML(r,settings);wrapWords(el);
     const blob=await html2pdf().set({margin:[12,0,14,0],image:{type:"jpeg",quality:.96},
       html2canvas:{scale:2,backgroundColor:"#ffffff",useCORS:true},
@@ -569,7 +612,6 @@ async function saveCurrent(){
   if(!cur.address){toast("יש למלא כתובת אתר לפני שמירה");$("#f-address").focus();return}
   if(!cur.id)cur.id=uid();
   cur.example=false;cur.updatedAt=Date.now();cur.createdAt=cur.createdAt||Date.now();
-  if(sb&&!(cur.signer&&cur.signer.inspector)){cur.signer=pick(settings,SIGNER_KEYS,true);cur.signerId=me.uid}
   try{await store.saveReport(structuredClone(cur));dirty=false;updateStatus();toast("הדוח נשמר")}
   catch(e){toast(e&&e.code==="quota_exceeded"?"אין מקום לדוחות נוספים. מחק דוחות ישנים ונסה שוב.":"השמירה נכשלה. נסה שוב.")}
 }
@@ -597,7 +639,7 @@ function renderList(){
   box.innerHTML=`<div class="reports">${list.map(r=>{
     const sev=r.findings.filter(f=>f.status==="severe"||f.status==="defect").length;
     return `<article class="rcard"><div class="top"><span>דוח ${esc(r.number)}</span><span>${fmtDate(r.date)}</span></div>
-    <h4>${esc(r.address)}</h4><div class="sub">${esc(r.client||"ללא לקוח")} · ${esc(r.kind)}${r.signer&&r.signer.inspector?` · ${esc(r.signer.inspector)}`:""}${sev?` · <span style="color:var(--danger)">${sev} ליקויים</span>`:""}</div>
+    <h4>${esc(r.address)}</h4><div class="sub">${esc(r.client||"ללא לקוח")} · ${esc(r.kind)}${sev?` · <span style="color:var(--danger)">${sev} ליקויים</span>`:""}</div>
     <div class="sys">${r.systems.map(s=>`<span>${esc(s)}</span>`).join("")}</div>
     <div class="acts"><button class="btn" data-act="open" data-id="${r.id}">פתח</button><button class="btn" data-act="copy" data-id="${r.id}">שכפל</button>
     <button class="btn" data-act="pdf" data-id="${r.id}">PDF</button>
@@ -607,10 +649,11 @@ function updateCount(){$("#count").textContent=reports.length?`(${reports.length
 
 /* ---------- settings ---------- */
 function fillSettings(){
-  document.querySelectorAll("#sform [data-s]").forEach(el=>{el.value=settingsSaved||["tagline","accent","font","logoPos"].includes(el.dataset.s)?(settings[el.dataset.s]||""):"";el.placeholder=el.placeholder||SAMPLE_SETTINGS[el.dataset.s]||""});
+  document.querySelectorAll("#sform [data-s]").forEach(el=>{el.value=settingsSaved||["tagline","accent","headFont","bodyFont","logoPos","logoSize"].includes(el.dataset.s)?(settings[el.dataset.s]||""):"";el.placeholder=el.placeholder||SAMPLE_SETTINGS[el.dataset.s]||""});
   const img=$("#logo-img");img.hidden=!settings.logo;if(settings.logo)img.src=settings.logo;$("#logo-clear").hidden=!settings.logo;
-  drawSigFrom(settings.signature);markSwatch();
+  drawSigFrom(settings.signature);markSwatch();showLogoSize();renderFontPick();
 }
+function showLogoSize(){$("#logo-size-val").textContent=Math.round((+settings.logoSize||78)/78*100)+"%"}
 function readSettingsForm(){document.querySelectorAll("#sform [data-s]").forEach(el=>{settings[el.dataset.s]=el.value})}
 function resizeImage(file,max){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/png"))};im.onerror=rej;im.src=fr.result};fr.onerror=rej;fr.readAsDataURL(file)})}
 // signature pad
@@ -624,7 +667,7 @@ function drawSigFrom(src){pctx.clearRect(0,0,pad.width,pad.height);sigTouched=fa
 function sigData(){const d=pctx.getImageData(0,0,pad.width,pad.height).data;for(let i=3;i<d.length;i+=4)if(d[i])return pad.toDataURL("image/png");return""}
 
 /* ---------- ui ---------- */
-function show(t){["edit","list","set"].forEach(k=>{$("#view-"+k).hidden=k!==t;$(`[data-tab="${k}"]`).setAttribute("aria-selected",k===t)});if(t==="edit")requestAnimationFrame(fitPreview);if(t==="list")renderList()}
+function show(t){if(t==="set")loadPreviews();["edit","list","set"].forEach(k=>{$("#view-"+k).hidden=k!==t;$(`[data-tab="${k}"]`).setAttribute("aria-selected",k===t)});if(t==="edit")requestAnimationFrame(fitPreview);if(t==="list")renderList()}
 let tt;function toast(m){const t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2600)}
 function showBanner(m){const b=$("#banner");b.textContent=m;b.hidden=false}
 function renderAll(){fillForm();fillSettings();renderList()}
@@ -658,16 +701,24 @@ $("#reports").addEventListener("click",async e=>{
     pendingDel=null;try{await store.deleteReport(id);if(cur.id===id){cur.id=null;updateStatus()}toast("הדוח נמחק")}catch(err){toast("המחיקה נכשלה. נסה שוב.")}
   }
 });
-$("#logo-file").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{settings.logo=await resizeImage(f,360);fillSettingsLogo();renderLetter()}catch(err){toast("לא ניתן לקרוא את הקובץ. בחר קובץ תמונה.")}e.target.value=""});
+$("#logo-file").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{settings.logo=await resizeImage(f,700);fillSettingsLogo();renderLetter()}catch(err){toast("לא ניתן לקרוא את הקובץ. בחר קובץ תמונה.")}e.target.value=""});
 function fillSettingsLogo(){const img=$("#logo-img");img.hidden=!settings.logo;if(settings.logo)img.src=settings.logo;$("#logo-clear").hidden=!settings.logo}
 $("#logo-clear").addEventListener("click",()=>{settings.logo="";fillSettingsLogo();renderLetter()});
 $("#sig-clear").addEventListener("click",()=>{pctx.clearRect(0,0,pad.width,pad.height);sigTouched=true;settings.signature="";renderLetter()});
-$("#sform").addEventListener("input",()=>{readSettingsForm();markSwatch();renderLetter()});
+$("#sform").addEventListener("input",()=>{readSettingsForm();markSwatch();showLogoSize();renderLetter()});
+$("#fontrole").addEventListener("click",e=>{const b=e.target.closest("[data-role]");if(!b)return;fontRole=b.dataset.role;renderFontPick()});
+$("#fontpick").addEventListener("click",e=>{const b=e.target.closest("[data-font]");if(!b)return;settings[fontRole]=b.dataset.font;$(fontRole==="headFont"?"#s-headfont":"#s-bodyfont").value=b.dataset.font;renderFontPick();renderLetter()});
+$("#font-file").addEventListener("change",async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;
+  const lim=sb?600000:150000;if(f.size>lim){toast(`הקובץ גדול מדי (${Math.round(f.size/1024)}KB). נסה גרסת WOFF2 של הגופן, עד ${Math.round(lim/1024)}KB`);return}
+  const data=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f)});
+  settings.customFont={name:f.name.replace(/\.[^.]+$/,""),data};await applyCustomFont();if(!customLoaded){settings.customFont=null;return}
+  settings[fontRole]="__custom";$(fontRole==="headFont"?"#s-headfont":"#s-bodyfont").value="__custom";renderFontPick();renderLetter();toast("הגופן נטען. לחץ על שמירה כדי לשמור אותו")});
+$("#font-clear").addEventListener("click",()=>{settings.customFont=null;customLoaded=null;["headFont","bodyFont"].forEach(k=>{if(settings[k]==="__custom")settings[k]=SAMPLE_SETTINGS[k]});$("#s-headfont").value=settings.headFont;$("#s-bodyfont").value=settings.bodyFont;renderFontPick();renderLetter()});
 $("#swatches").addEventListener("click",e=>{const b=e.target.closest(".sw");if(!b)return;$("#s-accent").value=b.dataset.c;settings.accent=b.dataset.c;markSwatch();renderLetter()});
-$("#sig-file").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{settings.signature=await resizeImage(f,600);drawSigFrom(settings.signature);renderLetter();toast("החתימה נטענה. לחץ על שמירת פרטי החברה")}catch(err){toast("לא ניתן לקרוא את הקובץ. בחר קובץ תמונה.")}e.target.value=""});
+$("#sig-file").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{settings.signature=await resizeImage(f,600);drawSigFrom(settings.signature);renderLetter();toast("החתימה נטענה. לחץ על שמור הגדרות")}catch(err){toast("לא ניתן לקרוא את הקובץ. בחר קובץ תמונה.")}e.target.value=""});
 $("#sform").addEventListener("submit",async e=>{
   e.preventDefault();readSettingsForm();if(sigTouched)settings.signature=sigData();
-  try{await store.saveSettings({...settings});settingsSaved=true;renderLetter();toast(sb?"ההגדרות נשמרו":"פרטי החברה נשמרו")}catch(err){toast("השמירה נכשלה. ייתכן שהלוגו גדול מדי.")}
+  try{await store.saveSettings({...settings});settingsSaved=true;renderLetter();toast("ההגדרות נשמרו")}catch(err){toast("השמירה נכשלה. ייתכן שהלוגו גדול מדי.")}
 });
 window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
 
