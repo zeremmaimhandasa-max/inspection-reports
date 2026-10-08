@@ -1,0 +1,97 @@
+אפליקציית דוחות בדיקה: הקמה עם Firebase + GitHub + Netlify
+==============================================================
+
+איך זה עובד:
+  GitHub   שומר את קבצי האפליקציה.
+  Netlify  מציג אותם כאתר, ומתעדכן לבד בכל שינוי ב-GitHub.
+  Firebase שומר את הדוחות ומנהל את הכניסה של העובדים.
+
+הקבצים בתיקייה (לא משנים להם את השמות):
+  index.html            האפליקציה
+  config.js             פרטי החיבור ל-Firebase (ממלאים פעם אחת, בשלב 1)
+  firestore.rules       כללי האבטחה למסד הנתונים (מעתיקים ל-Firebase)
+  netlify.toml          הגדרות לנטליפיי
+  manifest.webmanifest, sw.js, קבצי icon   התקנה כאפליקציה בטלפון
+
+
+שלב 1: Firebase (כ-10 דקות)
+---------------------------
+1. נכנסים ל-console.firebase.google.com עם חשבון גוגל.
+   לוחצים "Create a project", נותנים שם (למשל inspection-reports) ומאשרים.
+   את Google Analytics אפשר לכבות, היא לא נחוצה.
+
+2. רישום האתר:
+   במסך הפרויקט לוחצים על סמל ה-Web ( </> ), נותנים כינוי (reports-web)
+   ולוחצים Register app. לא מסמנים Firebase Hosting.
+   מופיע קוד עם בלוק שנראה כך:
+       const firebaseConfig = {
+         apiKey: "AIza...",
+         authDomain: "...firebaseapp.com",
+         projectId: "...",
+         ...
+       };
+   פותחים את config.js בפנקס רשימות (Notepad) ומעתיקים כל ערך למקום המתאים
+   בין המירכאות: apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId.
+   שומרים.
+
+3. כניסה עם אימייל וסיסמה:
+   בתפריט בצד: Build > Authentication > Get started.
+   בלשונית Sign-in method בוחרים Email/Password, מפעילים (Enable) ושומרים.
+   אחר כך, בלשונית Settings > User actions, מורידים את הסימון מ-
+   "Enable create (sign-up)" ושומרים. ככה רק מי שאתה מוסיף יכול להיכנס.
+
+4. מסד נתונים:
+   Build > Firestore Database > Create database.
+   מיקום: eur3 (Europe). מצב: Production mode. לוחצים Create.
+   עוברים ללשונית Rules, מוחקים את מה שכתוב שם,
+   מדביקים את כל התוכן של הקובץ firestore.rules ולוחצים Publish.
+
+5. עובדים:
+   Authentication > Users > Add user. מקלידים אימייל וסיסמה לכל עובד (וגם לך).
+   את הפרטים מעבירים לעובד. הוא יוכל לשנות את הסיסמה בתוך האפליקציה.
+
+
+שלב 2: GitHub (כ-5 דקות)
+------------------------
+6. ב-github.com לוחצים + (למעלה) > New repository.
+   שם: inspection-reports. אפשר לבחור Private. לוחצים Create repository.
+7. בדף המאגר לוחצים על הקישור "uploading an existing file".
+   פותחים במחשב את התיקייה inspection-reports, מסמנים את כל הקבצים שבתוכה (Ctrl+A)
+   וגוררים אותם לחלון של GitHub. גוררים את הקבצים עצמם, לא את התיקייה.
+   לוחצים Commit changes.
+   ברשימת הקבצים במאגר צריך לראות את index.html ישירות, לא בתוך תיקייה.
+
+הערה: מפתח ה-apiKey שבקובץ config.js אינו סוד. של Firebase מיועד להיות גלוי באתר,
+וההגנה על הנתונים מגיעה מכללי האבטחה (שלב 4) ומהכניסה עם סיסמה.
+
+
+שלב 3: Netlify (כ-3 דקות)
+-------------------------
+8. ב-app.netlify.com: Add new project > Import an existing project > GitHub.
+   מאשרים לנטליפיי גישה ל-GitHub ובוחרים את המאגר inspection-reports.
+   לא משנים שום הגדרה. לוחצים Deploy.
+   (אם רוצים את הכתובת הקיימת delicate-pavlova-8e9640, אפשר במקום זה להיכנס לאתר הקיים:
+    Site configuration > Build & deploy > Link repository, ולבחור את המאגר.)
+9. כשהפריסה מסתיימת, מעתיקים את כתובת האתר (משהו כמו https://xxxx.netlify.app).
+10. חוזרים ל-Firebase: Authentication > Settings > Authorized domains > Add domain,
+    ומוסיפים את הכתובת בלי https://, למשל xxxx.netlify.app
+    בלי זה הכניסה לא תעבוד.
+11. נכנסים לאתר, מתחברים, ובלשונית "פרטי החברה" ממלאים לוגו, פרטים ועיצוב.
+    כל עובד ממלא שם, תפקיד וחתימה משלו.
+
+
+עדכונים בהמשך
+-------------
+כשתקבל ממני גרסה חדשה: ב-GitHub נכנסים למאגר, לוחצים Add file > Upload files
+וגוררים את הקבצים החדשים. את config.js לא מעלים שוב, כדי לא למחוק את פרטי החיבור.
+לוחצים Commit changes. נטליפיי יעדכן את האתר לבד תוך דקה.
+
+העברת דוחות קיימים
+-------------------
+לפני המעבר, באתר הישן: "דוחות שמורים" > "גיבוי לקובץ".
+אחרי ההתחברות לגרסה החדשה: "שחזור מגיבוי". הדוחות יעלו לענן.
+
+התקנה בטלפון
+------------
+אנדרואיד (Chrome): פותחים את האתר, לוחצים ⋮ ובוחרים "התקנת אפליקציה".
+אייפון (Safari):   פותחים את האתר, לוחצים על כפתור השיתוף ובוחרים "הוסף למסך הבית".

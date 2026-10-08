@@ -1,0 +1,15 @@
+# אתר סטטי: אין שלב בנייה, מפרסמים את התיקייה כמו שהיא
+[build]
+  publish = "."
+  command = ""
+
+# הקובץ שמאפשר עבודה כאפליקציה מותקנת תמיד נטען בגרסה העדכנית
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/config.js"
+  [headers.values]
+    Cache-Control = "no-cache"
