@@ -141,7 +141,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 .st{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:4px;border:1px solid currentColor;white-space:nowrap}
 .st-ok{color:var(--ok)} .st-note{color:var(--note)} .st-defect{color:var(--defect)} .st-severe{color:var(--severe);background:#fbeceb}
 .tally{display:flex;gap:16px;font-size:12.5px;color:var(--paper-muted);margin-top:8px;font-variant-numeric:tabular-nums}
-.summary{white-space:pre-wrap}
+.summary,.pre{white-space:pre-wrap;overflow-wrap:anywhere}
 .sig{margin-top:34px;break-inside:avoid}
 .sig img{max-height:70px;max-width:220px;display:block;margin:6px 0 2px}
 .sig .line{width:200px;border-top:1px solid var(--paper-ink);margin-top:44px}
@@ -474,7 +474,7 @@ function renderFindings(){
        <select id="fs-${i}" data-k="status">${Object.entries(STATUSES).map(([k,v])=>`<option value="${k}"${k===f.status?" selected":""}>${v}</option>`).join("")}</select>
        <button type="button" class="btn ghost del" data-del="${i}" aria-label="מחק ממצא ${i+1}">✕</button></div>
      <textarea id="ft-${i}" data-k="text" placeholder="תיאור הממצא">${esc(f.text)}</textarea>
-     <input type="text" id="fr-${i}" data-k="rec" placeholder="המלצה (לא חובה)" value="${esc(f.rec)}">
+     <textarea id="fr-${i}" data-k="rec" rows="2" placeholder="המלצה (לא חובה)">${esc(f.rec)}</textarea>
    </div>`).join("")||`<div class="hint">אין ממצאים עדיין.</div>`;
 }
 function autoIntro(){
@@ -494,7 +494,7 @@ function letterHTML(r,s){
   const subj=`דוח ${r.kind||"בדיקה"}: ${r.systems.length?joinHe(r.systems):"מערכות מים"}${r.address?", "+r.address:""}`;
   const contact=[s.phone,s.email,s.addr].filter(Boolean).map(esc).join(" &nbsp;|&nbsp; ");
   const tally=Object.keys(STATUSES).map(k=>[k,r.findings.filter(f=>f.status===k).length]).filter(x=>x[1]);
-  const rows=r.findings.map((f,i)=>`<tr><td class="n">${i+1}</td><td><b>${esc(f.loc)}</b></td><td>${esc(f.text)}</td><td><span class="st st-${f.status}">${STATUSES[f.status]}</span></td><td>${esc(f.rec)}</td></tr>`).join("");
+  const rows=r.findings.map((f,i)=>`<tr><td class="n">${i+1}</td><td><b>${esc(f.loc)}</b></td><td class="pre">${esc(f.text)}</td><td><span class="st st-${f.status}">${STATUSES[f.status]}</span></td><td class="pre">${esc(f.rec)}</td></tr>`).join("");
   return `
   <div class="lh logo-${esc(s.logoPos||"left")}"><div><div class="co">${esc(s.company||"שם החברה")}</div>${s.tagline?`<div class="tag">${esc(s.tagline)}</div>`:""}
     ${contact?`<div class="contact">${contact}${s.reg?`<br>ח.פ. ${esc(s.reg)}`:""}</div>`:""}</div>
@@ -502,7 +502,7 @@ function letterHTML(r,s){
   <div class="meta"><span>תאריך: ${fmtDate(r.date)}</span><span>דוח מס׳ ${esc(r.number)}</span></div>
   <div class="to">לכבוד<b>${esc(r.client||"___")}</b>${r.contact?`<div>לידי: ${esc(r.contact)}</div>`:""}</div>
   <div class="subject">הנדון: <u>${esc(subj)}</u></div>
-  <p>${esc(r.intro||autoIntroFor(r))}</p>
+  <p class="pre">${esc(r.intro||autoIntroFor(r))}</p>
   <table class="facts">
     <tr><td>כתובת האתר</td><td>${esc(r.address)}${r.site?` <span style="color:var(--paper-muted)">(${esc(r.site)})</span>`:""}</td></tr>
     <tr><td>תאריך ביצוע</td><td>${fmtDate(r.date)}</td></tr>
@@ -582,9 +582,24 @@ async function makePdf(r){
 // html2canvas drops spaces and reorders punctuation in RTL runs; render each word as its own box so the browser's layout is kept.
 function wrapWords(root){
   const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);const nodes=[];while(w.nextNode())nodes.push(w.currentNode);
-  for(const n of nodes){if(!n.nodeValue.trim())continue;const frag=document.createDocumentFragment();
-    for(const part of n.nodeValue.split(/(\s+)/)){if(!part)continue;if(/^\s+$/.test(part))frag.appendChild(document.createTextNode(" "));
-      else{const sp=document.createElement("span");sp.style.display="inline-block";sp.textContent="\u200F"+part+"\u200F";frag.appendChild(sp)}}
+  for(const n of nodes){
+    const keep=!!(n.parentElement&&n.parentElement.closest(".pre,.summary"));
+    if(!keep&&!n.nodeValue.trim())continue;
+    const frag=document.createDocumentFragment();
+    for(const part of n.nodeValue.replace(/\r\n?/g,"\n").split(/(\s+)/)){
+      if(!part)continue;
+      if(/^\s+$/.test(part)){
+        if(!keep){frag.appendChild(document.createTextNode(" "));continue}
+        // keep the user's own line breaks, blank lines and repeated spaces exactly as typed
+        const lines=part.split("\n");
+        lines.forEach((sp,k)=>{
+          if(k>0)frag.appendChild(document.createElement("br"));
+          const len=sp.replace(/\t/g,"    ").length;if(!len)return;
+          const last=k===lines.length-1;
+          frag.appendChild(document.createTextNode(last&&k===0?" "+"\u00A0".repeat(len-1):"\u00A0".repeat(len)));
+        });
+      }else{const sp=document.createElement("span");sp.style.display="inline-block";sp.textContent="\u200F"+part+"\u200F";frag.appendChild(sp)}
+    }
     n.parentNode.replaceChild(frag,n)}
 }
 async function saveFile(name,data,dl){
