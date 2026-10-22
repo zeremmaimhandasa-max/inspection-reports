@@ -73,7 +73,7 @@ legend{font-weight:700;font-size:12px;letter-spacing:.06em;color:var(--muted);pa
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media (max-width:420px){.grid2{grid-template-columns:1fr}}
 label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:600;min-width:0}
-input[type=text],input[type=date],input[type=tel],input[type=email],input[type=password],select,textarea{width:100%;border:1px solid var(--line);background:var(--surface-2);border-radius:7px;padding:8px 10px;font-size:15px;color:var(--ink);font-weight:400}
+input[type=text],input[type=date],input[type=tel],input[type=email],input[type=password],input[type=number],select,textarea{width:100%;border:1px solid var(--line);background:var(--surface-2);border-radius:7px;padding:8px 10px;font-size:15px;color:var(--ink);font-weight:400}
 textarea{resize:vertical;min-height:70px;line-height:1.5}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);background:var(--surface)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
@@ -143,6 +143,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 .tally{display:flex;gap:16px;font-size:12.5px;color:var(--paper-muted);margin-top:8px;font-variant-numeric:tabular-nums}
 .summary,.pre{white-space:pre-wrap;overflow-wrap:anywhere}
 .sig{margin-top:34px;break-inside:avoid}
+.wterms{font-size:13px;color:#33424a;border:1px solid var(--paper-line);border-radius:4px;padding:10px 14px;background:#f8fafb;margin-top:8px}
+.wterms b{display:block;margin-bottom:4px;color:var(--paper-ink)}
+.wline{margin:0 0 8px}
 .sig img{max-height:70px;max-width:220px;display:block;margin:6px 0 2px}
 .sig .line{width:200px;border-top:1px solid var(--paper-ink);margin-top:44px}
 .sig .nm{font-weight:700}
@@ -176,6 +179,20 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 .linkbtn{background:none;border:0;color:var(--accent);cursor:pointer;padding:0;font-weight:600;text-decoration:underline;text-underline-offset:3px}
 .err{color:var(--danger);font-size:14px}
 body.locked nav.tabs,body.locked #view-edit,body.locked #view-list,body.locked #view-set{display:none!important}
+.newbtns{display:flex;flex-wrap:wrap;gap:8px}
+.typetag{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
+.typetag.work{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.grid3{display:grid;grid-template-columns:2fr 1fr 1.3fr;gap:8px}
+@media (max-width:420px){.grid3{grid-template-columns:1fr 1fr}.grid3>:first-child{grid-column:1/-1}}
+.finding .mini{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--muted);font-weight:600;min-width:0}
+.wpill{font-size:12px;font-weight:700;padding:1px 8px;border-radius:99px;white-space:nowrap}
+.wpill.on{background:var(--accent-soft);color:var(--accent)}
+.wpill.off{background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.filters{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px}
+.filters button{border:0;background:none;padding:6px 12px;border-radius:7px;cursor:pointer;color:var(--muted);font-weight:600}
+.filters button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.check{display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
 .toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:8px;font-weight:600;z-index:10;max-width:calc(100% - 32px)}
 .banner{background:var(--danger-soft);color:var(--danger);padding:8px 12px;border-radius:8px;font-size:14px}
 @media (prefers-reduced-motion:no-preference){.btn,.chip span,nav.tabs button{transition:background .15s,border-color .15s,color .15s}}
@@ -217,7 +234,10 @@ body.locked nav.tabs,body.locked #view-edit,body.locked #view-list,body.locked #
   <section id="view-edit">
     <div class="toolbar">
       <span class="status" id="status"></span>
-      <button class="btn" id="btn-new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>דוח חדש</button>
+      <span class="newbtns">
+        <button class="btn" id="btn-new" data-new="inspection"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>דוח בדיקה חדש</button>
+        <button class="btn" id="btn-new-work" data-new="work"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>דוח עבודה חדש</button>
+      </span>
       <button class="btn" id="btn-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h8V3M8 21v-7h8v7"/></svg>שמור דוח</button>
       <button class="btn primary" id="btn-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>הורד PDF</button>
     </div>
@@ -240,20 +260,41 @@ body.locked nav.tabs,body.locked #view-edit,body.locked #view-list,body.locked #
           </div>
         </fieldset>
         <fieldset>
-          <legend>אופי הבדיקה</legend>
+          <legend id="lg-kind">אופי הבדיקה</legend>
           <div class="chips" id="systems"></div>
-          <label class="f">סוג הבדיקה
+          <label class="f"><span id="lb-kind">סוג הבדיקה</span>
             <select id="f-kind" data-f="kind"></select>
           </label>
-          <label class="f">פתיח<textarea id="f-intro" data-f="intro" rows="3"></textarea><span class="hint">השאר ריק לנוסח אוטומטי לפי פרטי הבדיקה</span></label>
+          <label class="f">פתיח<textarea id="f-intro" data-f="intro" rows="3"></textarea><span class="hint">השאר ריק לנוסח אוטומטי</span></label>
         </fieldset>
-        <fieldset>
+        <fieldset class="only-insp">
           <legend>ממצאים</legend>
           <div id="findings" style="display:flex;flex-direction:column;gap:8px"></div>
           <button type="button" class="btn" id="btn-add-f"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>הוסף ממצא</button>
         </fieldset>
+        <fieldset class="only-work" hidden>
+          <legend>עבודות שבוצעו</legend>
+          <div id="works" style="display:flex;flex-direction:column;gap:8px"></div>
+          <button type="button" class="btn" id="btn-add-w"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>הוסף עבודה</button>
+        </fieldset>
+        <fieldset class="only-work" hidden>
+          <legend>חלקים שהוחלפו / סופקו</legend>
+          <div id="parts" style="display:flex;flex-direction:column;gap:8px"></div>
+          <button type="button" class="btn" id="btn-add-p"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>הוסף חלק</button>
+        </fieldset>
+        <fieldset class="only-work" hidden>
+          <legend>אחריות</legend>
+          <div class="grid2">
+            <label class="f">אחריות כללית על העבודה (חודשים)<input type="number" id="f-wmonths" data-f="warrantyMonths" min="0" step="1" inputmode="numeric" placeholder="למשל 12"></label>
+            <label class="f">תחילת האחריות<input type="date" id="f-wstart" data-f="warrantyStart"></label>
+          </div>
+          <div class="hint" id="w-end"></div>
+          <span class="hint">אפשר גם לתת אחריות שונה לכל עבודה או חלק, בשדה "אחריות" שבשורה שלהם.</span>
+          <label class="check"><input type="checkbox" id="f-useterms" data-fb="useTerms">הצג את תנאי האחריות הקבועים <span class="hint">(נערכים בלשונית פרטי החברה)</span></label>
+          <label class="f">תנאים נוספים למסמך זה<textarea id="f-terms" data-f="terms" rows="3" placeholder="לא חובה. למשל: האחריות על המשאבה ניתנת על ידי היבואן."></textarea></label>
+        </fieldset>
         <fieldset>
-          <legend>סיכום והמלצות</legend>
+          <legend id="lg-summary">סיכום והמלצות</legend>
           <textarea id="f-summary" data-f="summary" rows="5"></textarea>
         </fieldset>
       </form>
@@ -268,6 +309,7 @@ body.locked nav.tabs,body.locked #view-edit,body.locked #view-list,body.locked #
   <!-- LIST -->
   <section id="view-list" hidden>
     <div class="list-head">
+      <div class="filters" id="filters"><button type="button" data-type="all" aria-pressed="true">הכל</button><button type="button" data-type="inspection" aria-pressed="false">דוחות בדיקה</button><button type="button" data-type="work" aria-pressed="false">דוחות עבודה</button></div>
       <input type="text" id="search" placeholder="חיפוש לפי כתובת, לקוח או מספר דוח">
       <span style="margin-inline-start:auto;display:flex;gap:8px;flex-wrap:wrap">
         <button type="button" class="btn" id="btn-backup">גיבוי לקובץ</button>
@@ -305,6 +347,11 @@ body.locked nav.tabs,body.locked #view-edit,body.locked #view-list,body.locked #
           <button type="button" class="btn ghost" id="sig-clear">נקה חתימה</button>
         </div>
         <span class="hint">צייר בעכבר או באצבע, או העלה צילום של חתימה או חותמת (PNG עם רקע שקוף נראה הכי טוב). החתימה מופיעה בסוף כל דוח, מעל שם החברה.</span>
+      </fieldset>
+      <fieldset>
+        <legend>תנאי אחריות קבועים</legend>
+        <textarea id="s-wterms" data-s="warrantyTerms" rows="7"></textarea>
+        <span class="hint">הנוסח הזה מופיע בכל דוח עבודה ופירוט אחריות. אפשר לכבות אותו במסמך מסוים.</span>
       </fieldset>
       <fieldset>
         <legend>עיצוב הדוח</legend>
@@ -358,6 +405,15 @@ body.locked nav.tabs,body.locked #view-edit,body.locked #view-list,body.locked #
 (function(){
 const SYSTEMS=["חדר משאבות","מערכת הגברת לחץ","מערכת ניקוז","מערכת ביוב"];
 const KINDS=["בדיקה תקופתית","בדיקה שנתית","בדיקת קבלה / מסירה","בדיקה בעקבות תקלה","בדיקה לפני אכלוס"];
+const WORK_KINDS=["תיקון","התקנה","החלפת ציוד","שיפוץ / שדרוג","טיפול תקופתי"];
+const DEFAULT_TERMS="האחריות מכסה פגמים בחלקים שסופקו ובעבודה שבוצעה על ידינו, בשימוש רגיל ובהתאם להוראות היצרן.\nהאחריות אינה חלה על נזק שנגרם משימוש לא תקין, מתנודות או הפסקות חשמל, מהצפה, ממים עם משקעים או חומרים זרים, או מטיפול של גורם אחר בציוד.\nהאחריות מותנית בתשלום מלא ובביצוע טיפולים תקופתיים כנדרש.\nלקבלת שירות במסגרת האחריות יש לפנות למשרדנו ולציין את מספר מסמך זה.";
+const isWork=r=>r&&r.type==="work";
+const TYPE_NAME={inspection:"דוח בדיקה",work:"דוח עבודה"};
+function addMonthsEnd(iso,m){if(!iso||!(+m>0))return"";const[y,mo,d]=iso.split("-").map(Number);const t=new Date(y,mo-1+ +m,d);if(t.getDate()!==d)t.setDate(0);t.setDate(t.getDate()-1);return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0")}
+function monthsLabel(m){m=+m;if(!(m>0))return"";if(m===12)return"שנה";if(m===24)return"שנתיים";if(m%12===0)return `${m/12} שנים`;if(m===1)return"חודש";return `${m} חודשים`}
+const wStart=r=>r.warrantyStart||r.date;
+function itemWarranty(r,m){if(!(+m>0))return"";return `${monthsLabel(m)}<br><span style="color:var(--paper-muted)">עד ${fmtDate(addMonthsEnd(wStart(r),m))}</span>`}
+function docWarrantyEnd(r){const ms=[+r.warrantyMonths||0,...(r.works||[]).map(x=>+x.months||0),...(r.parts||[]).map(x=>+x.months||0)];const m=Math.max(...ms);return m>0?addMonthsEnd(wStart(r),m):""}
 const STATUSES={ok:"תקין",note:"הערה",defect:"ליקוי",severe:"ליקוי חמור"};
 const ST_COLOR={ok:"var(--ok)",note:"var(--note)",defect:"var(--defect)",severe:"var(--severe)"};
 const $=s=>document.querySelector(s);
@@ -367,7 +423,7 @@ const fmtDate=iso=>{if(!iso)return"";const[y,m,d]=iso.split("-");return `${+d}.$
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const joinHe=a=>a.length<2?(a[0]||""):a.slice(0,-1).join(", ")+" ו"+a[a.length-1];
 
-const SAMPLE_SETTINGS={company:"שם החברה שלך",tagline:"בדיקה ותחזוקת מערכות מים, ניקוז וביוב",phone:"050-0000000",email:"office@example.co.il",addr:"",reg:"",logo:"",signature:"",accent:"#0d6574",headFont:"Frank Ruhl Libre",bodyFont:"Assistant",customFont:null,logoPos:"left",logoSize:"78"};
+const SAMPLE_SETTINGS={company:"שם החברה שלך",tagline:"בדיקה ותחזוקת מערכות מים, ניקוז וביוב",phone:"050-0000000",email:"office@example.co.il",addr:"",reg:"",logo:"",signature:"",accent:"#0d6574",headFont:"Frank Ruhl Libre",bodyFont:"Assistant",customFont:null,logoPos:"left",logoSize:"78",warrantyTerms:DEFAULT_TERMS};
 const SAMPLE={id:null,example:true,number:"",date:today(),address:"רח׳ הנרקיס 14, רמת גן",site:"בניין מגורים, 9 קומות",client:"נציגות הבית המשותף",contact:"מר יוסי לוי",
   systems:["חדר משאבות","מערכת הגברת לחץ"],kind:"בדיקה תקופתית",intro:"",
   findings:[
@@ -454,21 +510,32 @@ function onSignedIn(){
 }
 
 /* ---------- editor ---------- */
-function suggestNumber(){const y=new Date().getFullYear();const n=reports.filter(r=>String(r.number||"").startsWith(y+"-")).length+1;cur.number=`${y}-${String(n).padStart(3,"0")}`;$("#f-number").value=cur.number;renderLetter()}
+function suggestNumber(){const y=new Date().getFullYear();const pre=isWork(cur)?`ע-${y}-`:`${y}-`;const n=Math.max(0,...reports.filter(r=>isWork(r)===isWork(cur)&&String(r.number||"").startsWith(pre)).map(r=>parseInt(String(r.number).slice(pre.length))||0))+1;cur.number=`${pre}${String(n).padStart(3,"0")}`;$("#f-number").value=cur.number;renderLetter()}
 function buildChips(){
   $("#systems").innerHTML=SYSTEMS.map((s,i)=>`<label class="chip"><input type="checkbox" id="sys-${i}" value="${esc(s)}"><span>${esc(s)}</span></label>`).join("");
-  $("#f-kind").innerHTML=KINDS.map(k=>`<option>${esc(k)}</option>`).join("");
 }
+function applyTypeUI(){
+  const w=isWork(cur);
+  document.querySelectorAll(".only-work").forEach(e=>e.hidden=!w);document.querySelectorAll(".only-insp").forEach(e=>e.hidden=w);
+  $("#lg-kind").textContent=w?"אופי העבודה":"אופי הבדיקה";$("#lb-kind").textContent=w?"סוג העבודה":"סוג הבדיקה";
+  $("#lg-summary").textContent=w?"הערות (לא חובה)":"סיכום והמלצות";
+  const ks=w?WORK_KINDS:KINDS;$("#f-kind").innerHTML=[...ks,...(cur.kind&&!ks.includes(cur.kind)?[cur.kind]:[])].map(k=>`<option>${esc(k)}</option>`).join("");
+}
+function updateWEnd(){if(!isWork(cur))return;const e=addMonthsEnd(wStart(cur),cur.warrantyMonths);$("#w-end").textContent=e?`האחריות הכללית בתוקף מ-${fmtDate(wStart(cur))} עד ${fmtDate(e)}.`:"";$("#f-wstart").placeholder=cur.date}
 function fillForm(){
+  applyTypeUI();
+  if(isWork(cur)&&!cur.warrantyStart)$("#f-wstart").value="";
+  $("#f-useterms").checked=cur.useTerms!==false;
   document.querySelectorAll("#form [data-f]").forEach(el=>{el.value=cur[el.dataset.f]??""});
   SYSTEMS.forEach((s,i)=>{$("#sys-"+i).checked=cur.systems.includes(s)});
   $("#f-intro").placeholder=autoIntro();
-  renderFindings();renderLetter();updateStatus();
+  renderFindings();renderWorks();renderParts();updateWEnd();renderLetter();updateStatus();
 }
 function renderFindings(){
+  if(isWork(cur))return;
   const box=$("#findings");
-  box.innerHTML=cur.findings.map((f,i)=>`
-   <div class="finding" style="--st:${ST_COLOR[f.status]}" data-i="${i}">
+  box.innerHTML=(cur.findings=cur.findings||[]).map((f,i)=>`
+   <div class="finding" style="--st:${ST_COLOR[f.status]}" data-list="findings" data-i="${i}">
      <div class="row"><span class="num">${i+1}</span>
        <input type="text" id="fl-${i}" data-k="loc" placeholder="רכיב / מיקום" value="${esc(f.loc)}">
        <select id="fs-${i}" data-k="status">${Object.entries(STATUSES).map(([k,v])=>`<option value="${k}"${k===f.status?" selected":""}>${v}</option>`).join("")}</select>
@@ -477,7 +544,37 @@ function renderFindings(){
      <textarea id="fr-${i}" data-k="rec" rows="2" placeholder="המלצה (לא חובה)">${esc(f.rec)}</textarea>
    </div>`).join("")||`<div class="hint">אין ממצאים עדיין.</div>`;
 }
+const ADD_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>';
+function renderWorks(){
+  if(!isWork(cur))return;
+  $("#works").innerHTML=(cur.works||[]).map((w,i)=>`
+   <div class="finding" style="--st:var(--accent)" data-list="works" data-i="${i}">
+     <div class="row"><span class="num">${i+1}</span>
+       <input type="text" id="wl-${i}" data-k="loc" placeholder="רכיב / מיקום" value="${esc(w.loc)}">
+       <button type="button" class="btn ghost del" data-del="${i}" aria-label="מחק עבודה ${i+1}">✕</button></div>
+     <textarea id="wt-${i}" data-k="text" placeholder="מה בוצע">${esc(w.text)}</textarea>
+     <label class="mini">אחריות לעבודה זו (חודשים, לא חובה)<input type="number" id="wm-${i}" data-k="months" min="0" step="1" inputmode="numeric" value="${esc(w.months)}"></label>
+   </div>`).join("")||`<div class="hint">עדיין לא נוספו עבודות.</div>`;
+}
+function renderParts(){
+  if(!isWork(cur))return;
+  $("#parts").innerHTML=(cur.parts||[]).map((p,i)=>`
+   <div class="finding" style="--st:var(--muted)" data-list="parts" data-i="${i}">
+     <div class="row"><span class="num">${i+1}</span>
+       <input type="text" id="pn-${i}" data-k="name" placeholder="שם החלק, למשל משאבה טבולה 1.5 כ״ס" value="${esc(p.name)}">
+       <button type="button" class="btn ghost del" data-del="${i}" aria-label="מחק חלק ${i+1}">✕</button></div>
+     <div class="grid3">
+       <label class="mini">דגם / מק״ט<input type="text" id="pm-${i}" data-k="model" value="${esc(p.model)}"></label>
+       <label class="mini">כמות<input type="number" id="pq-${i}" data-k="qty" min="0" step="any" inputmode="decimal" value="${esc(p.qty)}"></label>
+       <label class="mini">אחריות (חודשים)<input type="number" id="pw-${i}" data-k="months" min="0" step="1" inputmode="numeric" value="${esc(p.months)}"></label>
+     </div>
+   </div>`).join("")||`<div class="hint">לא הוחלפו חלקים. אם לא היו חלקים, אפשר להשאיר ריק.</div>`;
+}
 function autoIntro(){
+  if(isWork(cur)){
+    const sys=cur.systems.length?joinHe(cur.systems.map(x=>"ב"+x)):"במערכות המים";
+    return `בתאריך ${fmtDate(cur.date)||"___"} ביצענו עבודות ${cur.kind||"תיקון"} ${sys} באתר ${cur.address||"___"}. להלן פירוט העבודות שבוצעו, החלקים שהוחלפו ותנאי האחריות.`;
+  }
   const sys=cur.systems.length?joinHe(cur.systems):"מערכות המים";
   return `בהמשך לפנייתכם, בתאריך ${fmtDate(cur.date)||"___"} ביצענו ${cur.kind||"בדיקה"} של ${sys} באתר ${cur.address||"___"}. להלן ממצאי הבדיקה והמלצותינו.`;
 }
@@ -486,15 +583,17 @@ let rt;function scheduleRender(){clearTimeout(rt);rt=setTimeout(renderLetter,60)
 function updateStatus(){
   const s=$("#status");
   const saved=cur.id&&reports.some(r=>r.id===cur.id);
-  s.innerHTML=(cur.example?`דוח לדוגמה<span class="example-flag">דוגמה</span>`:saved?(dirty?"יש שינויים שלא נשמרו":"הדוח שמור"):"דוח חדש, טרם נשמר");
+  const tag=`<span class="typetag${isWork(cur)?" work":""}">${isWork(cur)?"דוח עבודה ופירוט אחריות":"דוח בדיקה"}</span> `;
+  s.innerHTML=tag+(cur.example?`דוח לדוגמה<span class="example-flag">דוגמה</span>`:saved?(dirty?"יש שינויים שלא נשמרו":"הדוח שמור"):"חדש, טרם נשמר");
 }
 
 /* ---------- letter ---------- */
 function letterHTML(r,s){
-  const subj=`דוח ${r.kind||"בדיקה"}: ${r.systems.length?joinHe(r.systems):"מערכות מים"}${r.address?", "+r.address:""}`;
+  const subj=isWork(r)?`דוח עבודה ופירוט אחריות: ${r.systems.length?joinHe(r.systems):"מערכות מים"}${r.address?", "+r.address:""}`:`דוח ${r.kind||"בדיקה"}: ${r.systems.length?joinHe(r.systems):"מערכות מים"}${r.address?", "+r.address:""}`;
   const contact=[s.phone,s.email,s.addr].filter(Boolean).map(esc).join(" &nbsp;|&nbsp; ");
-  const tally=Object.keys(STATUSES).map(k=>[k,r.findings.filter(f=>f.status===k).length]).filter(x=>x[1]);
-  const rows=r.findings.map((f,i)=>`<tr><td class="n">${i+1}</td><td><b>${esc(f.loc)}</b></td><td class="pre">${esc(f.text)}</td><td><span class="st st-${f.status}">${STATUSES[f.status]}</span></td><td class="pre">${esc(f.rec)}</td></tr>`).join("");
+  const findings=r.findings||[];
+  const tally=Object.keys(STATUSES).map(k=>[k,findings.filter(f=>f.status===k).length]).filter(x=>x[1]);
+  const rows=findings.map((f,i)=>`<tr><td class="n">${i+1}</td><td><b>${esc(f.loc)}</b></td><td class="pre">${esc(f.text)}</td><td><span class="st st-${f.status}">${STATUSES[f.status]}</span></td><td class="pre">${esc(f.rec)}</td></tr>`).join("");
   return `
   <div class="lh logo-${esc(s.logoPos||"left")}"><div><div class="co">${esc(s.company||"שם החברה")}</div>${s.tagline?`<div class="tag">${esc(s.tagline)}</div>`:""}
     ${contact?`<div class="contact">${contact}${s.reg?`<br>ח.פ. ${esc(s.reg)}`:""}</div>`:""}</div>
@@ -503,19 +602,45 @@ function letterHTML(r,s){
   <div class="to">לכבוד<b>${esc(r.client||"___")}</b>${r.contact?`<div>לידי: ${esc(r.contact)}</div>`:""}</div>
   <div class="subject">הנדון: <u>${esc(subj)}</u></div>
   <p class="pre">${esc(r.intro||autoIntroFor(r))}</p>
-  <table class="facts">
+  ${isWork(r)?workBody(r,s):`<table class="facts">
     <tr><td>כתובת האתר</td><td>${esc(r.address)}${r.site?` <span style="color:var(--paper-muted)">(${esc(r.site)})</span>`:""}</td></tr>
     <tr><td>תאריך ביצוע</td><td>${fmtDate(r.date)}</td></tr>
-    <tr><td>אופי הבדיקה</td><td>${esc(r.kind)}</td></tr>
+    <tr><td>סוג הבדיקה</td><td>${esc(r.kind)}</td></tr>
     <tr><td>מערכות שנבדקו</td><td>${esc(r.systems.join(" · ")||"—")}</td></tr>
   </table>
   <h3>ממצאי הבדיקה</h3>
-  ${r.findings.length?`<table class="ftable"><thead><tr><th>#</th><th>רכיב / מיקום</th><th>ממצא</th><th>סטטוס</th><th>המלצה</th></tr></thead><tbody>${rows}</tbody></table>
+  ${findings.length?`<table class="ftable"><thead><tr><th>#</th><th>רכיב / מיקום</th><th>ממצא</th><th>סטטוס</th><th>המלצה</th></tr></thead><tbody>${rows}</tbody></table>
    <div class="tally">${tally.map(([k,n])=>`<span>${STATUSES[k]}: ${n}</span>`).join("")}</div>`:`<p class="empty-note">לא נרשמו ממצאים.</p>`}
   <h3>סיכום והמלצות</h3>
-  <div class="summary">${r.summary?esc(r.summary):`<span class="empty-note">—</span>`}</div>
+  <div class="summary">${r.summary?esc(r.summary):`<span class="empty-note">—</span>`}</div>`}
   <div class="sig"><div>בברכה,</div>${s.signature?`<img src="${s.signature}" alt="">`:`<div class="line"></div>`}
     <div class="nm">${esc(s.company)}</div></div>`;
+}
+function workBody(r,s){
+  const works=(r.works||[]).filter(w=>w.loc||w.text),parts=(r.parts||[]).filter(p=>p.name||p.model);
+  const wCol=works.some(w=>+w.months>0),pCol=parts.some(p=>+p.months>0);
+  const gEnd=addMonthsEnd(wStart(r),r.warrantyMonths);
+  const fixed=r.useTerms!==false&&s.warrantyTerms?s.warrantyTerms:"";
+  const anyItem=wCol||pCol;
+  return `<table class="facts">
+    <tr><td>כתובת האתר</td><td>${esc(r.address)}${r.site?` <span style="color:var(--paper-muted)">(${esc(r.site)})</span>`:""}</td></tr>
+    <tr><td>תאריך ביצוע</td><td>${fmtDate(r.date)}</td></tr>
+    <tr><td>סוג העבודה</td><td>${esc(r.kind)}</td></tr>
+    <tr><td>מערכות</td><td>${esc(r.systems.join(" · ")||"—")}</td></tr>
+    ${gEnd?`<tr><td>אחריות כללית</td><td>${monthsLabel(r.warrantyMonths)}, עד ${fmtDate(gEnd)}</td></tr>`:""}
+  </table>
+  <h3>העבודות שבוצעו</h3>
+  ${works.length?`<table class="ftable"><thead><tr><th>#</th><th>רכיב / מיקום</th><th>תיאור העבודה</th>${wCol?"<th>אחריות</th>":""}</tr></thead><tbody>
+    ${works.map((w,i)=>`<tr><td class="n">${i+1}</td><td><b>${esc(w.loc)}</b></td><td class="pre">${esc(w.text)}</td>${wCol?`<td style="white-space:nowrap">${itemWarranty(r,w.months)||"—"}</td>`:""}</tr>`).join("")}</tbody></table>`:`<p class="empty-note">לא נרשמו עבודות.</p>`}
+  ${parts.length?`<h3>חלקים שהוחלפו / סופקו</h3><table class="ftable"><thead><tr><th>#</th><th>חלק</th><th>דגם / מק״ט</th><th>כמות</th>${pCol?"<th>אחריות</th>":""}</tr></thead><tbody>
+    ${parts.map((p,i)=>`<tr><td class="n">${i+1}</td><td><b>${esc(p.name)}</b></td><td>${esc(p.model)||"—"}</td><td style="font-variant-numeric:tabular-nums">${esc(p.qty)||"1"}</td>${pCol?`<td style="white-space:nowrap">${itemWarranty(r,p.months)||"—"}</td>`:""}</tr>`).join("")}</tbody></table>`:""}
+  <h3>פירוט האחריות</h3>
+  ${gEnd?`<p class="wline">אחריות כללית על העבודה: <b>${monthsLabel(r.warrantyMonths)}</b>, מתאריך ${fmtDate(wStart(r))} ועד תאריך ${fmtDate(gEnd)}.</p>`:""}
+  ${anyItem?`<p class="wline">${gEnd?"לפריטים שמצוינת לצדם בטבלה תקופת אחריות נפרדת, חלה התקופה המצוינת לצדם.":"תקופת האחריות לכל פריט מצוינת לצדו בטבלה, החל מתאריך "+fmtDate(wStart(r))+"."}</p>`:""}
+  ${!gEnd&&!anyItem&&!fixed&&!r.terms?`<p class="empty-note">לא צוינה אחריות.</p>`:""}
+  ${r.terms?`<div class="pre wline">${esc(r.terms)}</div>`:""}
+  ${fixed?`<div class="wterms"><b>תנאי האחריות</b><div class="pre">${esc(fixed)}</div></div>`:""}
+  ${r.summary?`<h3>הערות</h3><div class="summary">${esc(r.summary)}</div>`:""}`;
 }
 function autoIntroFor(r){const save=cur;cur=r;const t=autoIntro();cur=save;return t}
 const FONTS=[
@@ -571,7 +696,7 @@ async function makePdf(r){
     const blob=await html2pdf().set({margin:[12,0,14,0],image:{type:"jpeg",quality:.96},
       html2canvas:{scale:2,backgroundColor:"#ffffff",useCORS:true},
       jsPDF:{unit:"mm",format:"a4",orientation:"portrait"},pagebreak:{mode:["css","legacy"],avoid:["tr",".sig"]}}).from(el).outputPdf("blob");
-    const name=`דוח ${r.number||""} ${r.address||""}`.replace(/[\\/:*?"<>|]/g," ").replace(/\s+/g," ").trim()+".pdf";
+    const name=`${isWork(r)?"דוח עבודה":"דוח בדיקה"} ${r.number||""} ${r.address||""}`.replace(/[\\/:*?"<>|]/g," ").replace(/\s+/g," ").trim()+".pdf";
     await saveFile(name,blob,dl);toast("ה-PDF נשמר");
   }catch(e){
     if(e&&e.code==="declined"){} else if(e&&e.code==="rate_limited")toast("חלון שמירה כבר פתוח");
@@ -581,24 +706,31 @@ async function makePdf(r){
 
 // html2canvas drops spaces and reorders punctuation in RTL runs; render each word as its own box so the browser's layout is kept.
 function wrapWords(root){
+  const HEB=/[\u0590-\u05FF]/,LAT=/[A-Za-z]/;
   const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);const nodes=[];while(w.nextNode())nodes.push(w.currentNode);
   for(const n of nodes){
     const keep=!!(n.parentElement&&n.parentElement.closest(".pre,.summary"));
     if(!keep&&!n.nodeValue.trim())continue;
+    const parts=n.nodeValue.replace(/\r\n?/g,"\n").split(/(\s+)/).filter(x=>x!=="");
     const frag=document.createDocumentFragment();
-    for(const part of n.nodeValue.replace(/\r\n?/g,"\n").split(/(\s+)/)){
-      if(!part)continue;
-      if(/^\s+$/.test(part)){
-        if(!keep){frag.appendChild(document.createTextNode(" "));continue}
-        // keep the user's own line breaks, blank lines and repeated spaces exactly as typed
-        const lines=part.split("\n");
-        lines.forEach((sp,k)=>{
-          if(k>0)frag.appendChild(document.createElement("br"));
-          const len=sp.replace(/\t/g,"    ").length;if(!len)return;
-          const last=k===lines.length-1;
-          frag.appendChild(document.createTextNode(last&&k===0?" "+"\u00A0".repeat(len-1):"\u00A0".repeat(len)));
-        });
-      }else{const sp=document.createElement("span");sp.style.display="inline-block";sp.textContent="\u200F"+part+"\u200F";frag.appendChild(sp)}
+    const word=t=>{const sp=document.createElement("span");sp.style.display="inline-block";sp.textContent="\u200F"+t+"\u200F";return sp};
+    const space=ws=>{
+      if(!keep){frag.appendChild(document.createTextNode(" "));return}
+      // keep the user's own line breaks, blank lines and repeated spaces exactly as typed
+      const lines=ws.split("\n");
+      lines.forEach((sp,k)=>{if(k>0)frag.appendChild(document.createElement("br"));const len=sp.replace(/\t/g,"    ").length;if(!len)return;
+        frag.appendChild(document.createTextNode(k===0&&lines.length===1?" "+"\u00A0".repeat(len-1):"\u00A0".repeat(len)))});
+    };
+    for(let k=0;k<parts.length;){
+      const t=parts[k];
+      if(/^\s+$/.test(t)){space(t);k++;continue}
+      // a run of non-Hebrew words that includes English letters (model numbers, emails) stays left-to-right as one piece
+      let e=k,hasLat=false;
+      while(e<parts.length){const x=parts[e];if(/^\s+$/.test(x)){if(x.includes("\n")||e+1>=parts.length||HEB.test(parts[e+1]))break;e++;continue}if(HEB.test(x))break;if(LAT.test(x))hasLat=true;e++}
+      if(hasLat&&e>k){
+        const sp=document.createElement("span");sp.style.cssText="display:inline-block;direction:ltr;unicode-bidi:isolate";
+        sp.textContent=parts.slice(k,e).map(x=>/^\s+$/.test(x)?" ":x).join("");frag.appendChild(sp);k=e;
+      }else{frag.appendChild(word(t));k++}
     }
     n.parentNode.replaceChild(frag,n)}
 }
@@ -630,8 +762,11 @@ async function saveCurrent(){
   try{await store.saveReport(structuredClone(cur));dirty=false;updateStatus();toast("הדוח נשמר")}
   catch(e){toast(e&&e.code==="quota_exceeded"?"אין מקום לדוחות נוספים. מחק דוחות ישנים ונסה שוב.":"השמירה נכשלה. נסה שוב.")}
 }
-function newReport(){
-  cur={id:null,number:"",date:today(),address:"",site:"",client:"",contact:"",systems:[],kind:KINDS[0],intro:"",findings:[{loc:"",text:"",status:"ok",rec:""}],summary:""};
+function newReport(type){
+  if(type!=="work")type="inspection";
+  cur={id:null,type,number:"",date:today(),address:"",site:"",client:"",contact:"",systems:[],kind:(type==="work"?WORK_KINDS:KINDS)[0],intro:"",summary:""};
+  if(type==="work")Object.assign(cur,{works:[{loc:"",text:"",months:""}],parts:[],warrantyMonths:"12",warrantyStart:"",useTerms:true,terms:""});
+  else cur.findings=[{loc:"",text:"",status:"ok",rec:""}];
   dirty=false;suggestNumber();fillForm();show("edit");$("#f-address").focus();
 }
 function openReport(id,copy){
@@ -642,19 +777,24 @@ function openReport(id,copy){
 }
 
 /* ---------- list ---------- */
-let pendingDel=null;
+let pendingDel=null,listType="all";
+document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest("[data-type]");if(!b)return;listType=b.dataset.type;document.querySelectorAll("#filters button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderList()});
 function renderList(){
   updateCount();
   const q=$("#search").value.trim();
   const list=[...reports].sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(b.updatedAt||0)-(a.updatedAt||0))
-    .filter(r=>!q||[r.address,r.client,r.number,r.site].join(" ").includes(q));
+    .filter(r=>listType==="all"||(listType==="work")===isWork(r))
+    .filter(r=>!q||[r.address,r.client,r.number,r.site,...(r.parts||[]).map(p=>p.name+" "+(p.model||""))].join(" ").includes(q));
   const box=$("#reports");
-  if(!reports.length){box.innerHTML=`<div class="empty"><b>עדיין אין דוחות שמורים</b>כל דוח שתשמור יופיע כאן, ותוכל לפתוח, לשכפל או להוריד אותו כ-PDF.<div style="margin-top:14px"><button class="btn primary" data-act="new">כתוב דוח ראשון</button></div></div>`;return}
+  if(!reports.length){box.innerHTML=`<div class="empty"><b>עדיין אין דוחות שמורים</b>כל דוח שתשמור יופיע כאן, ותוכל לפתוח, לשכפל או להוריד אותו כ-PDF.<div style="margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn primary" data-act="new" data-type="inspection">דוח בדיקה חדש</button><button class="btn" data-act="new" data-type="work">דוח עבודה חדש</button></div></div>`;return}
   if(!list.length){box.innerHTML=`<div class="empty"><b>לא נמצאו דוחות</b>נסה מילת חיפוש אחרת.</div>`;return}
   box.innerHTML=`<div class="reports">${list.map(r=>{
-    const sev=r.findings.filter(f=>f.status==="severe"||f.status==="defect").length;
-    return `<article class="rcard"><div class="top"><span>דוח ${esc(r.number)}</span><span>${fmtDate(r.date)}</span></div>
+    const sev=(r.findings||[]).filter(f=>f.status==="severe"||f.status==="defect").length;
+    const we=isWork(r)?docWarrantyEnd(r):"";
+    const wp=we?(we>=today()?`<span class="wpill on">אחריות עד ${fmtDate(we)}</span>`:`<span class="wpill off">האחריות הסתיימה ${fmtDate(we)}</span>`):"";
+    return `<article class="rcard"><div class="top"><span><span class="typetag${isWork(r)?" work":""}">${isWork(r)?"עבודה":"בדיקה"}</span> מס׳ ${esc(r.number)}</span><span>${fmtDate(r.date)}</span></div>
     <h4>${esc(r.address)}</h4><div class="sub">${esc(r.client||"ללא לקוח")} · ${esc(r.kind)}${sev?` · <span style="color:var(--danger)">${sev} ליקויים</span>`:""}</div>
+    ${wp?`<div>${wp}</div>`:""}
     <div class="sys">${r.systems.map(s=>`<span>${esc(s)}</span>`).join("")}</div>
     <div class="acts"><button class="btn" data-act="open" data-id="${r.id}">פתח</button><button class="btn" data-act="copy" data-id="${r.id}">שכפל</button>
     <button class="btn" data-act="pdf" data-id="${r.id}">PDF</button>
@@ -664,7 +804,7 @@ function updateCount(){$("#count").textContent=reports.length?`(${reports.length
 
 /* ---------- settings ---------- */
 function fillSettings(){
-  document.querySelectorAll("#sform [data-s]").forEach(el=>{el.value=settingsSaved||["tagline","accent","headFont","bodyFont","logoPos","logoSize"].includes(el.dataset.s)?(settings[el.dataset.s]||""):"";el.placeholder=el.placeholder||SAMPLE_SETTINGS[el.dataset.s]||""});
+  document.querySelectorAll("#sform [data-s]").forEach(el=>{el.value=settingsSaved||["tagline","accent","headFont","bodyFont","logoPos","logoSize","warrantyTerms"].includes(el.dataset.s)?(settings[el.dataset.s]||""):"";el.placeholder=el.placeholder||SAMPLE_SETTINGS[el.dataset.s]||""});
   const img=$("#logo-img");img.hidden=!settings.logo;if(settings.logo)img.src=settings.logo;$("#logo-clear").hidden=!settings.logo;
   drawSigFrom(settings.signature);markSwatch();showLogoSize();renderFontPick();
 }
@@ -690,16 +830,21 @@ function renderAll(){fillForm();fillSettings();renderList()}
 document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.tab)));
 $("#form").addEventListener("input",e=>{
   const el=e.target;
-  if(el.dataset.f){cur[el.dataset.f]=el.value;if(el.dataset.f!=="intro")$("#f-intro").placeholder=autoIntro()}
-  else if(el.dataset.k){const i=+el.closest(".finding").dataset.i;cur.findings[i][el.dataset.k]=el.value;if(el.dataset.k==="status")el.closest(".finding").style.setProperty("--st",ST_COLOR[el.value])}
+  if(el.dataset.f){cur[el.dataset.f]=el.value;if(el.dataset.f!=="intro")$("#f-intro").placeholder=autoIntro();if(/^(warranty|date)/.test(el.dataset.f))updateWEnd()}
+  else if(el.dataset.fb){cur[el.dataset.fb]=el.checked}
+  else if(el.dataset.k){const row=el.closest("[data-list]");cur[row.dataset.list][+row.dataset.i][el.dataset.k]=el.value;if(el.dataset.k==="status")row.style.setProperty("--st",ST_COLOR[el.value])}
   else if(el.type==="checkbox"){cur.systems=SYSTEMS.filter((s,i)=>$("#sys-"+i).checked);$("#f-intro").placeholder=autoIntro()}
   touch();
 });
 $("#form").addEventListener("change",e=>{if(e.target.tagName==="SELECT"&&!e.target.dataset.k&&!e.target.dataset.f)return});
 $("#form").addEventListener("submit",e=>e.preventDefault());
-$("#findings").addEventListener("click",e=>{const d=e.target.closest("[data-del]");if(!d)return;cur.findings.splice(+d.dataset.del,1);renderFindings();touch()});
+$("#form").addEventListener("click",e=>{const d=e.target.closest("[data-del]");if(!d)return;const list=d.closest("[data-list]").dataset.list;cur[list].splice(+d.dataset.del,1);({findings:renderFindings,works:renderWorks,parts:renderParts})[list]();touch()});
+$("#btn-add-w").addEventListener("click",()=>{(cur.works=cur.works||[]).push({loc:"",text:"",months:""});renderWorks();touch();$("#wl-"+(cur.works.length-1)).focus()});
+$("#btn-add-p").addEventListener("click",()=>{(cur.parts=cur.parts||[]).push({name:"",model:"",qty:"1",months:""});renderParts();touch();$("#pn-"+(cur.parts.length-1)).focus()});
 $("#btn-add-f").addEventListener("click",()=>{cur.findings.push({loc:"",text:"",status:"ok",rec:""});renderFindings();touch();$("#fl-"+(cur.findings.length-1)).focus()});
-$("#btn-new").addEventListener("click",newReport);
+document.querySelectorAll("[data-new]").forEach(b=>b.addEventListener("click",()=>{if(dirty&&!confirmLeave(b))return;newReport(b.dataset.new)}));
+let leaveArm=null;
+function confirmLeave(b){if(leaveArm===b){leaveArm=null;return true}leaveArm=b;toast("יש שינויים שלא נשמרו. לחץ שוב כדי להתחיל מסמך חדש בלי לשמור");setTimeout(()=>{if(leaveArm===b)leaveArm=null},4000);return false}
 $("#btn-save").addEventListener("click",saveCurrent);
 $("#btn-pdf").addEventListener("click",()=>makePdf(cur));
 $("#search").addEventListener("input",renderList);
@@ -707,7 +852,7 @@ $("#btn-backup").addEventListener("click",exportBackup);
 $("#restore-file").addEventListener("change",e=>{const f=e.target.files[0];if(f)importBackup(f);e.target.value=""});
 $("#reports").addEventListener("click",async e=>{
   const b=e.target.closest("[data-act]");if(!b)return;const{act,id}=b.dataset;
-  if(act==="new")return newReport();
+  if(act==="new")return newReport(b.dataset.type);
   if(act==="open")return openReport(id,false);
   if(act==="copy")return openReport(id,true);
   if(act==="pdf")return makePdf(reports.find(r=>r.id===id));
